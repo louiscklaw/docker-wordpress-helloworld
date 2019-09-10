@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3'
 
 services:
    db:
@@ -16,13 +16,26 @@ services:
      depends_on:
        - db
      image: wordpress:latest
-     ports:
-       - "8000:80"
+    #  ports:
+    #    - "8000:80"
      restart: always
      environment:
        WORDPRESS_DB_HOST: db:3306
        WORDPRESS_DB_USER: wordpress
        WORDPRESS_DB_PASSWORD: wordpress
        WORDPRESS_DB_NAME: wordpress
+
+    labels:
+      # - "traefik.backend=foo"
+      - "traefik.port=80"
+      - "traefik.protocol=http"
+      - "traefik.weight=10"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:wp_helloworld.louislabs.com"
+      - "traefik.frontend.passHostHeader=true"
+      - "traefik.frontend.priority=10"
+      - "traefik.frontend.entryPoints=http"
+      - "traefik.docker.network=proxy"
+
 volumes:
     db_data: {}
