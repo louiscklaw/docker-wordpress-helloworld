@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
-docker-compose up -d --force-recreate --build --remove-orphans
+docker network create proxy
+
+docker-compose kill && docker-compose down
+docker-compose up --remove-orphans --force-recreate -d
 
 docker-compose ps
